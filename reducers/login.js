@@ -1,15 +1,20 @@
-import { TRY_AUTENTICATE, AUTENTICATE_END } from "../actions/login"
+import { TRY_AUTHENTICATE, AUTHENTICATE_ERROR, AUTHENTICATE_OK } from "../actions/login"
 
-let initState = { loading:false, message: '' };
+const initState = { loading:false, message: '', isLoggedIn: false };
 
-export default (state = initState, action) => {
+const loginReducer = (state = initState, action) => {
     switch (action.type) {
-        case TRY_AUTENTICATE:
-            state = {...state, loading: true};
+        case TRY_AUTHENTICATE:
+            state = {...state, loading: true, isLoggedIn: false};
             break;
-        case AUTENTICATE_END:
-            state = {...state, message: action.message, loading: false};
+        case AUTHENTICATE_ERROR:
+            state = {...state, message: action.message, loading: false, isLoggedIn: false};
+            break;
+        case AUTHENTICATE_OK:
+            state = {...state, isLoggedIn: true};
             break;
     }
     return state;
 };
+
+export default loginReducer;

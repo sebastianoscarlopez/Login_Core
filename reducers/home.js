@@ -1,12 +1,14 @@
 import { DATA_AVAILABLE } from "../actions/home"
 
-let dataState = { data: [], loading:false };
+const dataState = { loading:true, data: [] };
  
-export default (state = dataState, action) => {
+const homeReducer = (state = dataState, action) => {
     switch (action.type) {
         case DATA_AVAILABLE:
-            state = {...state, data: action.data, loading:false };
+            state = {...state, loading:false, data: action.data };
             break;
     }
     return state;
 };
+
+export default homeReducer;

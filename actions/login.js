@@ -1,25 +1,28 @@
 import { URLs } from "../config/settings";
 
-export const TRY_AUTENTICATE = 'TRY_AUTENTICATE'
-export const AUTENTICATE_END = 'AUTENTICATE_END'
+export const TRY_AUTHENTICATE = 'TRY_AUTHENTICATE'
+export const AUTHENTICATE_ERROR = 'AUTHENTICATE_ERROR'
+export const AUTHENTICATE_OK = 'AUTHENTICATE_OK'
 
-export function tryAutenticate(user, password)
+function tryAutenticate(user, password)
 {
     return (dispatch) => {
-        dispatch({type:TRY_AUTENTICATE});
+        dispatch({type:TRY_AUTHENTICATE});
         const url = URLs.LOGIN`${user}${password}`;
         fetch(url)
         .then(response => {
             return response.json()
         })
         .then(responseJson => {
-            dispatch({type:AUTENTICATE_END
-                , message: responseJson.Status.Codigo===1
-                    ? 'OK'
-                    : responseJson.Status.Texto});
+            dispatch({type: responseJson.Status.Codigo===1
+                ? AUTHENTICATE_OK
+                : AUTHENTICATE_ERROR
+                , message: responseJson.Status.Texto});
         })
         .catch(error => {
-            dispatch({type:AUTENTICATE_END, message: `Error inesperado ${error}`});
+            dispatch({type:AUTHENTICATE_ERROR, message: `Error inesperado ${error}`});
         })
     };
 }
+
+export default { tryAutenticate };
